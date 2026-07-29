@@ -3,87 +3,247 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#7fd4ff">
 <title>Storytime — a story a day</title>
 <style>
+  /* --h is the story's hue, set per story by JS. Everything else is derived from it. */
   :root {
-    --bg: #fbf8f3;
-    --ink: #2b2724;
-    --soft: #8a8178;
-    --line: #e4ded4;
-    --mark: #f0e2c4;
-    --accent: #7c6a52;
+    --h: 250;
+    --page: oklch(.93 .085 var(--h));
+    --page-2: oklch(.87 .12 calc(var(--h) + 40));
+    --card: oklch(.995 .012 var(--h));
+    --ink: oklch(.28 .05 var(--h));
+    --soft: oklch(.46 .06 var(--h));
+    --edge: oklch(.84 .1 var(--h));
+    --brand: oklch(.5 .17 var(--h));
+    --on-brand: oklch(.99 .01 var(--h));
+    --pop: oklch(.87 .17 calc(var(--h) + 70));
+    --sky-top: oklch(.93 .08 calc(var(--h) + 25));
+    --sky-bot: oklch(.84 .13 calc(var(--h) - 20));
+    --hill-far: oklch(.83 .14 148);
+    --hill-near: oklch(.74 .17 156);
+    --shadow: oklch(.5 .12 var(--h) / .28);
+    --z-scene: 0;
+    --z-cast: 1;
+    --z-card: 2;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #16151a;
-      --ink: #e8e3db;
-      --soft: #8f877e;
-      --line: #2c2a31;
-      --mark: #3d3524;
-      --accent: #c3ab86;
+      --page: oklch(.21 .05 var(--h));
+      --page-2: oklch(.15 .05 calc(var(--h) + 40));
+      --card: oklch(.27 .05 var(--h));
+      --ink: oklch(.95 .02 var(--h));
+      --soft: oklch(.76 .04 var(--h));
+      --edge: oklch(.42 .09 var(--h));
+      --brand: oklch(.78 .16 var(--h));
+      --on-brand: oklch(.2 .05 var(--h));
+      --pop: oklch(.52 .17 calc(var(--h) + 70));
+      --sky-top: oklch(.34 .09 calc(var(--h) + 25));
+      --sky-bot: oklch(.19 .07 calc(var(--h) - 20));
+      --hill-far: oklch(.4 .12 152);
+      --hill-near: oklch(.32 .11 158);
+      --shadow: oklch(.05 .05 var(--h) / .5);
     }
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background: var(--bg);
+    background: linear-gradient(var(--page) 30%, var(--page-2)) fixed;
     color: var(--ink);
-    font: 400 17px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font: 500 18px/1.7 ui-rounded, "SF Pro Rounded", "Segoe UI Variable Display", Nunito, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
   }
-  main { max-width: 34rem; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
-  header { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
-  .meta { color: var(--soft); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
-  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--line); }
-  a:hover { border-bottom-color: currentColor; }
+
+  /* ---------- the illustration ---------- */
+  /* The cast is a centred flex group so it stays composed at any width; sky, sun,
+     clouds and hills are absolute behind it. */
+  .scene {
+    position: relative;
+    height: clamp(13rem, 40vw, 19rem);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: clamp(.5rem, 4vw, 2.5rem);
+    padding-bottom: 3.6rem;
+    background: linear-gradient(var(--sky-top), var(--sky-bot));
+    overflow: hidden;
+    cursor: pointer;
+    isolation: isolate;
+  }
+  .sun {
+    position: absolute; top: 8%; right: 9%;
+    width: 4.5rem; height: 4.5rem; border-radius: 50%;
+    background: oklch(.92 .18 92);
+    box-shadow: 0 0 0 1.1rem oklch(.92 .18 92 / .3), 0 0 0 2.2rem oklch(.92 .18 92 / .16);
+    animation: pulse 5s ease-in-out infinite;
+  }
+  @media (prefers-color-scheme: dark) { .sun { background: oklch(.95 .06 250); box-shadow: 0 0 0 1rem oklch(.95 .06 250 / .18), 0 0 4rem 1rem oklch(.95 .06 250 / .28); } }
+  .cloud {
+    position: absolute;
+    background: oklch(1 0 0 / .8);
+    border-radius: 999px;
+    filter: blur(.2px);
+  }
+  .cloud::before, .cloud::after {
+    content: ""; position: absolute; background: inherit; border-radius: 50%;
+  }
+  .cloud::before { width: 60%; height: 160%; left: 8%; bottom: 25%; }
+  .cloud::after { width: 45%; height: 130%; right: 10%; bottom: 20%; }
+  .c1 { width: 8.5rem; height: 2.1rem; top: 16%; left: -30%; animation: drift 34s linear infinite; }
+  .c2 { width: 6rem; height: 1.6rem; top: 42%; left: -30%; opacity: .7; animation: drift 52s linear infinite 6s; }
+  @media (prefers-color-scheme: dark) { .cloud { background: oklch(1 0 0 / .16); } }
+  .hill {
+    position: absolute; left: -12%; right: -12%; border-radius: 50% 50% 0 0;
+  }
+  .h1 { bottom: -6.5rem; height: 10rem; background: var(--hill-far); }
+  .h2 { bottom: -8rem; height: 10rem; left: 22%; right: -30%; background: var(--hill-near); }
+
+  .cast {
+    z-index: var(--z-cast);
+    filter: drop-shadow(0 .28rem .5rem var(--shadow));
+    line-height: 1;
+    user-select: none;
+  }
+  .hero { font-size: clamp(4.5rem, 17vw, 7.5rem); animation: bob 3.4s ease-in-out infinite; }
+  .pal1 { margin-bottom: 1.6rem; font-size: clamp(2.2rem, 8vw, 3.4rem); animation: float 5s ease-in-out infinite; }
+  .pal2 { margin-bottom: .5rem; font-size: clamp(1.9rem, 6.5vw, 2.9rem); animation: float 6.5s ease-in-out infinite 1.2s; }
+  .scene.wiggle .hero { animation: wiggle .6s ease-out; }
+  .scene:active .hero { scale: 1.08; }
+
+  @keyframes bob { 50% { translate: 0 -1.1rem; rotate: -3deg; } }
+  @keyframes float { 33% { translate: .6rem -.9rem; rotate: 6deg; } 66% { translate: -.4rem -.4rem; rotate: -5deg; } }
+  @keyframes drift { to { left: 115%; } }
+  @keyframes pulse { 50% { scale: 1.07; } }
+  @keyframes wiggle { 25% { rotate: -12deg; } 50% { rotate: 10deg; } 75% { rotate: -6deg; } }
+  @keyframes rise { from { opacity: 0; translate: 0 1rem; } }
+  @keyframes popin { from { opacity: 0; scale: .82; } }
+
+  /* ---------- the story ---------- */
+  main {
+    max-width: 38rem;
+    margin: -2.2rem auto 0;
+    padding: 0 1rem 4rem;
+    position: relative;
+    z-index: var(--z-card);
+  }
+  .sheet {
+    background: var(--card);
+    border: 3px solid var(--edge);
+    border-radius: 2rem;
+    padding: 1.6rem clamp(1.1rem, 4vw, 2.2rem) 2rem;
+    box-shadow: 0 1.2rem 2.5rem -1rem var(--shadow);
+  }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .meta { color: var(--soft); font-size: .9rem; font-weight: 700; }
+  a { color: var(--brand); font-weight: 700; text-decoration: none; }
+  a:hover, a:focus-visible { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 4px; }
+  :focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; border-radius: .4rem; }
   h1 {
-    font: 400 2.1rem/1.25 Georgia, "Iowan Old Style", "Times New Roman", serif;
-    margin: 2.5rem 0 2rem;
-    letter-spacing: -.01em;
+    font-size: clamp(1.9rem, 7vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+    margin: .8rem 0 1.4rem;
+    text-wrap: balance;
+    animation: rise .5s cubic-bezier(.2, .9, .3, 1) both;
   }
   .story p {
-    font: 400 1.45rem/1.85 Georgia, "Iowan Old Style", "Times New Roman", serif;
-    margin: 0 0 1.15rem;
+    font-size: clamp(1.3rem, 4.6vw, 1.6rem);
+    line-height: 1.8;
+    margin: 0 0 1rem;
+    text-wrap: pretty;
+    animation: rise .5s cubic-bezier(.2, .9, .3, 1) both;
+    animation-delay: calc(var(--i) * 60ms);
   }
-  .story mark {
-    background: var(--mark);
-    color: inherit;
-    padding: 0 .12em;
-    border-radius: 2px;
+  .w { border-radius: .35rem; transition: color .12s, background-color .12s; }
+  .v { box-shadow: inset 0 -.42em 0 var(--pop); }
+  .w.now { background: var(--brand); color: var(--on-brand); box-shadow: none; }
+  .id {
+    margin-top: 1.6rem; padding: 1rem 1.2rem;
+    background: oklch(.5 .12 var(--h) / .09);
+    border-radius: 1.2rem;
+    animation: popin .3s ease-out;
   }
-  .id p { font-size: 1.05rem; line-height: 1.7; color: var(--soft); font-family: inherit; }
-  .id { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  .id p { font-size: 1.05rem; line-height: 1.65; color: var(--soft); margin: 0 0 .5rem; }
+  .id p:last-child { margin: 0; }
   .id[hidden] { display: none; }
-  .vocab { margin: 2.5rem 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
-  .vocab li { padding: .7rem 0 0; font-size: .95rem; color: var(--soft); }
-  .vocab b { color: var(--ink); font-weight: 600; }
-  .controls { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 2.5rem; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.8rem; }
   button {
-    font: inherit;
-    font-size: .9rem;
-    padding: .5rem 1rem;
-    color: var(--ink);
-    background: transparent;
-    border: 1px solid var(--line);
+    font: inherit; font-size: 1.05rem; font-weight: 800;
+    padding: .7rem 1.3rem;
+    min-height: 3rem;
+    color: var(--on-brand);
+    background: var(--brand);
+    border: 0;
     border-radius: 999px;
     cursor: pointer;
+    box-shadow: 0 .3rem 0 oklch(.35 .13 var(--h));
+    transition: translate .12s, box-shadow .12s;
   }
-  button:hover { border-color: var(--accent); color: var(--accent); }
-  button[aria-pressed="true"] { background: var(--mark); border-color: var(--mark); }
-  nav.pager { display: flex; justify-content: space-between; margin-top: 3.5rem; font-size: .9rem; }
-  ol.archive { padding-left: 1.6rem; margin: 2rem 0 0; }
-  ol.archive li { padding: .35rem 0; }
-  ol.archive a { font-size: 1.1rem; }
-  ol.archive .today { color: var(--soft); font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; margin-left: .5rem; border: 0; }
+  @media (prefers-color-scheme: dark) { button { box-shadow: 0 .3rem 0 oklch(.55 .14 var(--h)); } }
+  button:active { translate: 0 .3rem; box-shadow: 0 0 0 var(--brand); }
+  button[aria-pressed="true"] { background: var(--ink); box-shadow: 0 .3rem 0 var(--soft); }
+
+  .vocab { margin: 2rem 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+  .vocab li {
+    display: flex; gap: .6rem; align-items: baseline;
+    font-size: 1rem; color: var(--soft);
+    padding: .5rem .9rem;
+    background: oklch(.5 .12 var(--h) / .07);
+    border-radius: 1rem;
+  }
+  .vocab b { color: var(--ink); font-weight: 800; box-shadow: inset 0 -.4em 0 var(--pop); }
+
+  nav.pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 2.2rem; font-size: 1.05rem; }
+
+  /* ---------- archive ---------- */
+  .archive { list-style: none; display: flex; flex-wrap: wrap; gap: .8rem; padding: 0; margin: 1.5rem 0 0; }
+  .archive li { animation: popin .35s ease-out both; animation-delay: calc(var(--i) * 22ms); }
+  .archive a {
+    --h: var(--sh);
+    display: flex; align-items: center; gap: .6rem;
+    padding: .6rem 1.1rem .6rem .7rem;
+    background: oklch(.93 .1 var(--h));
+    color: oklch(.3 .09 var(--h));
+    border-radius: 999px;
+    font-size: 1.05rem;
+    text-decoration: none;
+    transition: scale .15s, rotate .15s;
+  }
+  @media (prefers-color-scheme: dark) { .archive a { background: oklch(.34 .1 var(--h)); color: oklch(.95 .03 var(--h)); } }
+  .archive a:hover, .archive a:focus-visible { scale: 1.05; rotate: -1.5deg; text-decoration: none; }
+  .archive .face { font-size: 1.6rem; line-height: 1; }
+  .archive .today { font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: .1rem .5rem; border-radius: 999px; background: var(--brand); color: var(--on-brand); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .archive a:hover { scale: 1; rotate: 0deg; }
+  }
 </style>
 </head>
 <body>
+<div class="scene" id="scene" aria-hidden="true">
+  <span class="sun"></span>
+  <span class="cloud c1"></span>
+  <span class="cloud c2"></span>
+  <span class="hill h1"></span>
+  <span class="hill h2"></span>
+  <span class="cast pal1" id="pal1"></span>
+  <span class="cast hero" id="hero"></span>
+  <span class="cast pal2" id="pal2"></span>
+</div>
+
 <main>
-  <header>
-    <span class="meta" id="meta"></span>
-    <a href="#/archive" id="home">All stories</a>
-  </header>
-  <div id="view"></div>
+  <div class="sheet">
+    <header>
+      <span class="meta" id="meta"></span>
+      <a href="#/archive" id="home">All stories</a>
+    </header>
+    <div id="view"></div>
+  </div>
 </main>
 
 <script src="stories.js"></script>
@@ -91,52 +251,109 @@
 // Today's story index: day of month, wrapping at 30. Day 31 repeats day 1.
 const todayIdx = () => (new Date().getDate() - 1) % STORIES.length;
 
+// A different hue per story. Cycled from a fixed set: bright and cheerful, and
+// no olive/khaki band (h 70-130), which goes muddy against the green hills.
+const HUES = [205, 250, 290, 320, 350, 20, 45, 190, 265, 335];
+const hue = i => i === null ? 190 : HUES[i % HUES.length];
+
 const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const rx = w => new RegExp('\\b(' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')\\b', 'i');
 
-// Highlight the first occurrence of each vocab word.
-function paras(text, vocab) {
-  return text.split('\n').map(line => {
-    let html = esc(line);
-    for (const [w] of vocab) {
-      if (!html.includes('<mark>')) html = html.replace(rx(w), '<mark>$1</mark>');
+// One span per word, tagged with its character offset in the spoken string, so
+// read-aloud can highlight the word being said. Vocab words get the .v swash.
+// Newlines become single spaces when spoken, so offsets line up 1:1.
+function build(text, vocab) {
+  const left = new Set(vocab.map(([w]) => w));
+  let off = 0, out = '';
+  text.split('\n').forEach((line, p) => {
+    const hits = [];
+    for (const w of [...left]) {
+      const m = rx(w).exec(line);
+      if (m) { hits.push([m.index, m.index + m[0].length]); left.delete(w); }
     }
-    return '<p>' + html + '</p>';
-  }).join('');
+    // Words get a span, punctuation is left between them so the swash doesn't
+    // underline it. Escaping happens per piece to keep the offsets raw-text accurate.
+    out += '<p style="--i:' + p + '">' + line.replace(/([\p{L}\p{N}'’]+)|([^\p{L}\p{N}'’]+)/gu, (m, word, gap, i) =>
+      word
+        ? '<span class="w' + (hits.some(([a, b]) => i >= a && i < b) ? ' v' : '') +
+          '" data-i="' + (off + i) + '">' + esc(word) + '</span>'
+        : hits.some(([a, b]) => i >= a && i + gap.length <= b)
+          ? '<span class="v">' + esc(gap) + '</span>'   // the space inside "wake up"
+          : esc(gap)) + '</p>';
+    off += line.length + 1;
+  });
+  return out;
 }
 
 // The whole story, one utterance, slow enough to follow along.
 let speaking = false;
 function toggleSpeak(btn, text) {
   speechSynthesis.cancel();
-  if (speaking) { speaking = false; btn.setAttribute('aria-pressed', 'false'); btn.textContent = '▶ Read aloud'; return; }
-  const u = new SpeechSynthesisUtterance(text.replace(/\n/g, ' … '));
+  clearNow();
+  if (speaking) return stopped(btn);
+  const u = new SpeechSynthesisUtterance(text.replace(/\n/g, ' '));
   u.lang = 'en-US';
   u.rate = 0.75;
   u.pitch = 1.1;
-  u.onend = u.onerror = () => { speaking = false; btn.setAttribute('aria-pressed', 'false'); btn.textContent = '▶ Read aloud'; };
+  const words = [...document.querySelectorAll('.story .w')];
+  // ponytail: charIndex is the word start in Chrome; Safari can land mid-word, so
+  // take the last span that starts at or before it.
+  u.onboundary = e => {
+    if (e.name && e.name !== 'word') return;
+    let hit = null;
+    for (const w of words) { if (+w.dataset.i <= e.charIndex) hit = w; else break; }
+    if (hit) { clearNow(); hit.classList.add('now'); }
+  };
+  u.onend = u.onerror = () => stopped(btn);
   speechSynthesis.speak(u);
   speaking = true;
   btn.setAttribute('aria-pressed', 'true');
-  btn.textContent = '■ Stop';
+  btn.textContent = '⏹ Stop';
+}
+function clearNow() { document.querySelector('.w.now')?.classList.remove('now'); }
+function stopped(btn) {
+  speaking = false;
+  clearNow();
+  btn.setAttribute('aria-pressed', 'false');
+  btn.textContent = '🔊 Read aloud';
 }
 
 const view = document.getElementById('view');
 const meta = document.getElementById('meta');
 const home = document.getElementById('home');
+const scene = document.getElementById('scene');
+const faces = ['hero', 'pal1', 'pal2'].map(id => document.getElementById(id));
+
+function setScene(i) {
+  document.documentElement.style.setProperty('--h', hue(i));
+  faces.forEach((el, n) => { el.textContent = i === null ? ['📖', '🌈', '⭐'][n] : STORIES[i].e[n]; });
+}
+
+// Tap the picture: the hero waves back, then goes back to bobbing.
+scene.onclick = () => {
+  scene.classList.remove('wiggle');
+  void scene.offsetWidth;
+  scene.classList.add('wiggle');
+};
+faces[0].addEventListener('animationend', e => {
+  if (e.animationName === 'wiggle') scene.classList.remove('wiggle');
+});
 
 function renderArchive() {
+  setScene(null);
   meta.textContent = STORIES.length + ' stories';
   home.textContent = "Today's story";
   home.href = '#/';
-  view.innerHTML = '<h1>All stories</h1><ol class="archive">' + STORIES.map((s, i) =>
-    '<li><a href="#/' + (i + 1) + '">' + esc(s.t) + '</a>' +
-    (i === todayIdx() ? '<span class="today">today</span>' : '') + '</li>'
-  ).join('') + '</ol>';
+  view.innerHTML = '<h1>All stories</h1><ul class="archive">' + STORIES.map((s, i) =>
+    '<li style="--i:' + i + '"><a style="--sh:' + hue(i) + '" href="#/' + (i + 1) + '">' +
+    '<span class="face">' + s.e[0] + '</span>' + esc(s.t) +
+    (i === todayIdx() ? '<span class="today">today</span>' : '') + '</a></li>'
+  ).join('') + '</ul>';
 }
 
 function renderStory(i) {
   const s = STORIES[i];
+  setScene(i);
   const isToday = i === todayIdx();
   meta.textContent = isToday
     ? new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
@@ -146,13 +363,13 @@ function renderStory(i) {
 
   view.innerHTML =
     '<h1>' + esc(s.t) + '</h1>' +
-    '<div class="story">' + paras(s.en, s.v) + '</div>' +
+    '<div class="story">' + build(s.en, s.v) + '</div>' +
     '<div class="controls">' +
-      '<button id="speak" aria-pressed="false">▶ Read aloud</button>' +
+      '<button id="speak" aria-pressed="false">🔊 Read aloud</button>' +
       '<button id="trans" aria-pressed="false">Bahasa Indonesia</button>' +
     '</div>' +
-    '<div class="id" id="id" hidden>' + paras(s.id, []) + '</div>' +
-    '<ul class="vocab">' + s.v.map(([w, m]) => '<li><b>' + esc(w) + '</b> — ' + esc(m) + '</li>').join('') + '</ul>' +
+    '<div class="id" id="id" hidden>' + build(s.id, []) + '</div>' +
+    '<ul class="vocab">' + s.v.map(([w, m]) => '<li><b>' + esc(w) + '</b> <span>' + esc(m) + '</span></li>').join('') + '</ul>' +
     '<nav class="pager">' +
       '<a href="#/' + (i === 0 ? STORIES.length : i) + '">← Previous</a>' +
       '<a href="#/' + ((i + 2) > STORIES.length ? 1 : i + 2) + '">Next →</a>' +
