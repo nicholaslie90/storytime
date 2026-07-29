@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Storytime — a story a day</title>
+<style>
+  :root {
+    --bg: #fbf8f3;
+    --ink: #2b2724;
+    --soft: #8a8178;
+    --line: #e4ded4;
+    --mark: #f0e2c4;
+    --accent: #7c6a52;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16151a;
+      --ink: #e8e3db;
+      --soft: #8f877e;
+      --line: #2c2a31;
+      --mark: #3d3524;
+      --accent: #c3ab86;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 17px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 34rem; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+  header { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .meta { color: var(--soft); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--line); }
+  a:hover { border-bottom-color: currentColor; }
+  h1 {
+    font: 400 2.1rem/1.25 Georgia, "Iowan Old Style", "Times New Roman", serif;
+    margin: 2.5rem 0 2rem;
+    letter-spacing: -.01em;
+  }
+  .story p {
+    font: 400 1.45rem/1.85 Georgia, "Iowan Old Style", "Times New Roman", serif;
+    margin: 0 0 1.15rem;
+  }
+  .story mark {
+    background: var(--mark);
+    color: inherit;
+    padding: 0 .12em;
+    border-radius: 2px;
+  }
+  .id p { font-size: 1.05rem; line-height: 1.7; color: var(--soft); font-family: inherit; }
+  .id { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  .id[hidden] { display: none; }
+  .vocab { margin: 2.5rem 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+  .vocab li { padding: .7rem 0 0; font-size: .95rem; color: var(--soft); }
+  .vocab b { color: var(--ink); font-weight: 600; }
+  .controls { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 2.5rem; }
+  button {
+    font: inherit;
+    font-size: .9rem;
+    padding: .5rem 1rem;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); color: var(--accent); }
+  button[aria-pressed="true"] { background: var(--mark); border-color: var(--mark); }
+  nav.pager { display: flex; justify-content: space-between; margin-top: 3.5rem; font-size: .9rem; }
+  ol.archive { padding-left: 1.6rem; margin: 2rem 0 0; }
+  ol.archive li { padding: .35rem 0; }
+  ol.archive a { font-size: 1.1rem; }
+  ol.archive .today { color: var(--soft); font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; margin-left: .5rem; border: 0; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="meta" id="meta"></span>
+    <a href="#/archive" id="home">All stories</a>
+  </header>
+  <div id="view"></div>
+</main>
+
+<script src="stories.js"></script>
+<script>
+// Today's story index: day of month, wrapping at 30. Day 31 repeats day 1.
+const todayIdx = () => (new Date().getDate() - 1) % STORIES.length;
+
+const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const rx = w => new RegExp('\\b(' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')\\b', 'i');
+
+// Highlight the first occurrence of each vocab word.
+function paras(text, vocab) {
+  return text.split('\n').map(line => {
+    let html = esc(line);
+    for (const [w] of vocab) {
+      if (!html.includes('<mark>')) html = html.replace(rx(w), '<mark>$1</mark>');
+    }
+    return '<p>' + html + '</p>';
+  }).join('');
+}
+
+// The whole story, one utterance, slow enough to follow along.
+let speaking = false;
+function toggleSpeak(btn, text) {
+  speechSynthesis.cancel();
+  if (speaking) { speaking = false; btn.setAttribute('aria-pressed', 'false'); btn.textContent = '▶ Read aloud'; return; }
+  const u = new SpeechSynthesisUtterance(text.replace(/\n/g, ' … '));
+  u.lang = 'en-US';
+  u.rate = 0.75;
+  u.pitch = 1.1;
+  u.onend = u.onerror = () => { speaking = false; btn.setAttribute('aria-pressed', 'false'); btn.textContent = '▶ Read aloud'; };
+  speechSynthesis.speak(u);
+  speaking = true;
+  btn.setAttribute('aria-pressed', 'true');
+  btn.textContent = '■ Stop';
+}
+
+const view = document.getElementById('view');
+const meta = document.getElementById('meta');
+const home = document.getElementById('home');
+
+function renderArchive() {
+  meta.textContent = STORIES.length + ' stories';
+  home.textContent = "Today's story";
+  home.href = '#/';
+  view.innerHTML = '<h1>All stories</h1><ol class="archive">' + STORIES.map((s, i) =>
+    '<li><a href="#/' + (i + 1) + '">' + esc(s.t) + '</a>' +
+    (i === todayIdx() ? '<span class="today">today</span>' : '') + '</li>'
+  ).join('') + '</ol>';
+}
+
+function renderStory(i) {
+  const s = STORIES[i];
+  const isToday = i === todayIdx();
+  meta.textContent = isToday
+    ? new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
+    : 'Story ' + (i + 1) + ' of ' + STORIES.length;
+  home.textContent = 'All stories';
+  home.href = '#/archive';
+
+  view.innerHTML =
+    '<h1>' + esc(s.t) + '</h1>' +
+    '<div class="story">' + paras(s.en, s.v) + '</div>' +
+    '<div class="controls">' +
+      '<button id="speak" aria-pressed="false">▶ Read aloud</button>' +
+      '<button id="trans" aria-pressed="false">Bahasa Indonesia</button>' +
+    '</div>' +
+    '<div class="id" id="id" hidden>' + paras(s.id, []) + '</div>' +
+    '<ul class="vocab">' + s.v.map(([w, m]) => '<li><b>' + esc(w) + '</b> — ' + esc(m) + '</li>').join('') + '</ul>' +
+    '<nav class="pager">' +
+      '<a href="#/' + (i === 0 ? STORIES.length : i) + '">← Previous</a>' +
+      '<a href="#/' + ((i + 2) > STORIES.length ? 1 : i + 2) + '">Next →</a>' +
+    '</nav>';
+
+  const speak = document.getElementById('speak');
+  speak.onclick = () => toggleSpeak(speak, s.en);
+  const trans = document.getElementById('trans');
+  const id = document.getElementById('id');
+  trans.onclick = () => {
+    id.hidden = !id.hidden;
+    trans.setAttribute('aria-pressed', String(!id.hidden));
+  };
+}
+
+function route() {
+  speechSynthesis.cancel();
+  speaking = false;
+  const h = location.hash.replace('#/', '');
+  if (h === 'archive') return renderArchive();
+  const n = parseInt(h, 10);
+  renderStory(n >= 1 && n <= STORIES.length ? n - 1 : todayIdx());
+}
+
+addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
