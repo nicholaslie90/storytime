@@ -1,6 +1,6 @@
-// 60 bedtime stories for 0-12 months: short sentences, sounds, repetition.
-// Stories 1-30 are originals. Stories 31-60 are retold from public-domain
-// sources (Mother Goose, Aesop, Andersen, folk tales) — see `src`.
+// 90 bedtime stories for 0-12 months: short sentences, sounds, repetition.
+// Stories without a `src` are originals; the rest are retold from public-domain
+// sources (Mother Goose, Aesop, Andersen, Grimm, Potter, folk tales) — see `src`.
 //
 // t   = title
 // sc  = scene: day | night | rain | snow | water | garden (picks the backdrop,
@@ -10,7 +10,7 @@
 // en / id = English / Indonesian, same number of lines
 // v   = [[word, arti]] vocabulary, each word must sit inside one line of `en`
 //
-// Day of the year picks the story: (dayOfYear - 1) % 60
+// Day of the year picks the story: (dayOfYear - 1) % 90
 const STORIES = [
 {
   t: "Good Morning, Sun",
@@ -523,5 +523,269 @@ const STORIES = [
   en: "In the reeds, five eggs began to crack.\nCrack, crack! Out came four yellow ducklings.\nThe last egg was big. Crack! Out came a grey bird.\nYou are not like us, said the others.\nThe grey bird was sad. He walked away.\nWinter came. Snow, snow, snow. So cold.\nHe slept alone in the white reeds.\nThen spring came. The ice melted. Drip, drip.\nHe went to the water and looked down.\nWho is that? A beautiful white swan!\nIt is me! I am a swan!\nThree big swans came swimming to him.\nWelcome, brother, they said. Come with us.\nAnd he was happy. So very happy.",
   id: "Di rerumputan air, lima telur mulai pecah.\nKrak, krak! Keluarlah empat anak bebek kuning.\nTelur terakhir besar. Krak! Keluarlah seekor burung kelabu.\nKamu tidak seperti kami, kata yang lain.\nBurung kelabu itu sedih. Ia berjalan pergi.\nMusim dingin datang. Salju, salju, salju. Dingin sekali.\nIa tidur sendirian di rerumputan yang putih.\nLalu musim semi datang. Esnya mencair. Tes, tes.\nIa pergi ke air dan menunduk melihat ke bawah.\nSiapa itu? Seekor angsa putih yang indah!\nItu aku! Aku seekor angsa!\nTiga angsa besar datang berenang ke arahnya.\nSelamat datang, saudara, kata mereka. Ikutlah dengan kami.\nDan ia pun bahagia. Bahagia sekali.",
   v: [["eggs", "telur"], ["ducklings", "anak bebek"], ["winter", "musim dingin"], ["melted", "mencair"], ["swan", "angsa"]]
+},
+{
+  t: "Little Boy Blue",
+  sc: "day",
+  e: ["👦","📯","🐑","🐮","🌾"],
+  src: "Mother Goose",
+  en: "Little Boy Blue, come blow your horn!\nThe sheep are in the meadow, eating grass.\nThe cows are in the corn. Oh dear!\nWhere is the little boy who looks after them?\nHe is under the haystack, fast asleep.\nZzz. Zzz. What a sleepy boy.\nWake up, Boy Blue! The animals are hungry.\nHe opens one eye. Then two eyes.\nHe picks up his horn. Toot, toot, toot!\nThe sheep look up. Baa!\nThe cows look up. Moo!\nHome they all go, one behind the other.\nWell blown, Boy Blue. Now you may sleep.",
+  id: "Anak Lelaki Biru, ayo tiup terompetmu!\nBiri-biri ada di padang, sedang makan rumput.\nSapi-sapi ada di ladang jagung. Aduh!\nDi mana anak lelaki yang menjaga mereka?\nIa di bawah tumpukan jerami, tertidur pulas.\nZzz. Zzz. Anak yang mengantuk sekali.\nBangun, Anak Biru! Hewan-hewan sedang lapar.\nIa membuka satu mata. Lalu dua mata.\nIa mengambil terompetnya. Tuut, tuut, tuut!\nBiri-biri menoleh ke atas. Mbee!\nSapi-sapi menoleh ke atas. Moo!\nMereka semua pulang, satu di belakang yang lain.\nBagus tiupanmu, Anak Biru. Sekarang kamu boleh tidur.",
+  v: [["horn", "terompet"], ["meadow", "padang rumput"], ["haystack", "tumpukan jerami"], ["asleep", "tertidur"], ["hungry", "lapar"]]
+},
+{
+  t: "Two Little Dickie Birds",
+  sc: "garden",
+  e: ["🐦","🐤","🧱","🌿"],
+  src: "Mother Goose",
+  en: "Two little dickie birds sat on a wall.\nOne named Peter, one named Paul.\nPeter has brown wings. Paul has grey.\nFly away, Peter! Whoosh! He is gone.\nFly away, Paul! Whoosh! Gone too.\nThe wall is empty. Where are they?\nUp in the sky. Round and round.\nCome back, Peter! Come back, Paul!\nHere they come. Flap, flap, flap.\nDown on the wall again. Hello, birds!\nThey sing a little song together.\nChirp, chirp. Tweet, tweet, tweet.\nTwo little dickie birds, side by side.",
+  id: "Dua burung kecil bertengger di dinding.\nSatu bernama Peter, satu bernama Paul.\nPeter bersayap cokelat. Paul kelabu.\nTerbanglah, Peter! Wuush! Ia pergi.\nTerbanglah, Paul! Wuush! Pergi juga.\nDindingnya kosong. Di mana mereka?\nDi atas langit. Berputar dan berputar.\nKembalilah, Peter! Kembalilah, Paul!\nItu mereka datang. Kepak, kepak, kepak.\nTurun ke dinding lagi. Halo, burung!\nMereka menyanyikan lagu kecil bersama.\nCuit, cuit. Cit, cit, cit.\nDua burung kecil, bersebelahan.",
+  v: [["wall", "dinding"], ["wings", "sayap"], ["empty", "kosong"], ["flap", "mengepakkan sayap"], ["together", "bersama"]]
+},
+{
+  t: "Round and Round the Garden",
+  sc: "garden",
+  e: ["🧸","✋","🌼","🌿"],
+  src: "traditional tickling rhyme",
+  en: "Round and round the garden goes the teddy bear.\nThe teddy bear walks so slowly.\nRound and round. Round your little palm.\nSlowly, slowly. Tickle, tickle, tickle.\nOne step. Two steps. Up your arm!\nUp, up, up. Nearly there.\nTickle under there! Ooh!\nYou laugh and laugh. Ha, ha, ha!\nAgain? All right. Round and round.\nRound the garden one more time.\nOne step. Two steps. Here I come!\nTickle, tickle under your chin!\nMore! More! One more time!\nRound and round the garden. Tickle!",
+  id: "Beruang teddy berjalan berkeliling taman.\nBeruang teddy berjalan sangat lambat.\nBerkeliling dan berkeliling. Di telapak tangan kecilmu.\nPerlahan, perlahan. Cekikik, cekikik, cekikik.\nSatu langkah. Dua langkah. Naik ke lenganmu!\nNaik, naik, naik. Hampir sampai.\nCekikik di bawah sini! Ooh!\nKamu tertawa dan tertawa. Ha, ha, ha!\nLagi? Baiklah. Berkeliling dan berkeliling.\nBerkeliling taman sekali lagi.\nSatu langkah. Dua langkah. Aku datang!\nCekikik, cekikik di bawah dagumu!\nLagi! Lagi! Sekali lagi!\nBerkeliling dan berkeliling taman. Cekikik!",
+  v: [["garden", "taman"], ["slowly", "perlahan"], ["palm", "telapak tangan"], ["tickle", "menggelitik"], ["laugh", "tertawa"]]
+},
+{
+  t: "Head, Shoulders, Knees and Toes",
+  sc: "day",
+  e: ["🧑‍🦱","🖐️","🦵","🦶"],
+  src: "traditional song",
+  en: "Head, shoulders, knees and toes,\nknees and toes!\nHead, shoulders, knees and toes,\nknees and toes!\nTouch your head. Pat, pat, pat.\nTouch your shoulders. Up so high.\nBend down low. Touch your knees.\nLower still. Touch your toes!\nAnd eyes and ears and mouth and nose.\nBlink your eyes. Wiggle your nose.\nCan you do it with your eyes shut?\nNow faster! Head, shoulders, knees, toes!\nFaster, faster! Oh, so silly!\nNow slowly. Head. Shoulders. Knees. Toes.\nAll done. Sit down. Well done!",
+  id: "Kepala, bahu, lutut dan kaki,\nlutut dan kaki!\nKepala, bahu, lutut dan kaki,\nlutut dan kaki!\nSentuh kepalamu. Tepuk, tepuk, tepuk.\nSentuh bahumu. Tinggi sekali.\nMembungkuk ke bawah. Sentuh lututmu.\nLebih rendah lagi. Sentuh jari kakimu!\nDan mata dan telinga dan mulut dan hidung.\nKedipkan matamu. Goyangkan hidungmu.\nBisakah sambil memejamkan mata?\nSekarang lebih cepat! Kepala, bahu, lutut, kaki!\nLebih cepat, lebih cepat! Oh, lucu sekali!\nSekarang perlahan. Kepala. Bahu. Lutut. Kaki.\nSelesai. Duduk. Hebat!",
+  v: [["head", "kepala"], ["shoulders", "bahu"], ["knees", "lutut"], ["bend", "membungkuk"], ["silly", "lucu/konyol"]]
+},
+{
+  t: "Five Little Monkeys",
+  sc: "night",
+  e: ["🐵","🛏️","🩺","🍌"],
+  src: "traditional nursery rhyme",
+  en: "Five little monkeys jumping on the bed.\nBoing, boing, boing! Up and down!\nOne fell off and bumped his head.\nOh dear! Mama called the doctor.\nThe doctor said, no more monkeys jumping!\nFour little monkeys jumping on the bed.\nBoing, boing! One fell off. Bump!\nThree little monkeys. Then two. Then one.\nBoing! Off he goes. Bump!\nNo more monkeys jumping on the bed.\nNow they all lie down. Quiet, quiet.\nFive little monkeys, sleeping in the bed.\nGood night, monkeys. Sleep. No more jumping.",
+  id: "Lima monyet kecil melompat-lompat di tempat tidur.\nBoing, boing, boing! Naik dan turun!\nSatu terjatuh dan kepalanya terbentur.\nAduh! Mama memanggil dokter.\nDokter berkata, tidak boleh melompat lagi!\nEmpat monyet kecil melompat di tempat tidur.\nBoing, boing! Satu terjatuh. Bruk!\nTiga monyet kecil. Lalu dua. Lalu satu.\nBoing! Ia jatuh juga. Bruk!\nTidak ada lagi monyet melompat di tempat tidur.\nSekarang mereka semua berbaring. Tenang, tenang.\nLima monyet kecil, tertidur di tempat tidur.\nSelamat malam, monyet. Tidurlah. Jangan melompat lagi.",
+  v: [["monkeys", "monyet"], ["jumping", "melompat-lompat"], ["bumped", "terbentur"], ["doctor", "dokter"], ["bed", "tempat tidur"]]
+},
+{
+  t: "Bye, Baby Bunting",
+  sc: "night",
+  e: ["👶","🔥","🫖","🌙"],
+  src: "Mother Goose",
+  en: "Bye, baby bunting.\nFather has gone hunting.\nMother has gone to milk the cow.\nSister has gone to pick berries.\nBrother has gone to fetch water.\nAnd baby stays right here with me.\nWrapped in a soft warm skin.\nRock, rock. So quiet in the house.\nThe fire is warm. Crackle, crackle.\nThe kettle sings a little song.\nSoon they will all come home.\nFather, mother, sister, brother. All of them.\nBut now it is just you and me.\nBye, baby bunting. Sleep, sleep, sleep.",
+  id: "Selamat tidur, bayi kecil.\nAyah pergi berburu.\nIbu pergi memerah susu sapi.\nKakak perempuan pergi memetik buah beri.\nKakak lelaki pergi mengambil air.\nDan bayi tinggal di sini bersamaku.\nTerbungkus kulit lembut yang hangat.\nAyun, ayun. Sepi sekali di rumah.\nApinya hangat. Kretek, kretek.\nCerek menyanyikan lagu kecil.\nSebentar lagi mereka semua pulang.\nAyah, ibu, kakak perempuan, kakak lelaki. Semuanya.\nTapi sekarang hanya ada kamu dan aku.\nSelamat tidur, bayi kecil. Tidur, tidur, tidur.",
+  v: [["hunting", "berburu"], ["berries", "buah beri"], ["rock", "berayun"], ["crackle", "bunyi kretek api"], ["kettle", "cerek"]]
+},
+{
+  t: "Sleep, Baby, Sleep",
+  sc: "night",
+  e: ["🐑","🌙","⭐","🌳"],
+  src: "traditional lullaby",
+  en: "Sleep, baby, sleep.\nOutside the lambs are sleeping.\nThe big white sheep are keeping watch.\nThe little stars are the lambs of the sky.\nThe moon is the shepherd. Hello, moon.\nSleep, baby, sleep.\nThe tall trees stand so still.\nNot one leaf is moving now.\nThe wind has gone to bed as well.\nEven the river sleeps. Shhh.\nYour dreams are soft and warm.\nClose your eyes, my little one.\nI am here. I will stay.\nSleep, baby, sleep. Sleep, sleep, sleep.",
+  id: "Tidurlah, sayang, tidurlah.\nDi luar anak-anak domba sudah tidur.\nDomba putih yang besar sedang berjaga.\nBintang-bintang kecil adalah anak domba di langit.\nBulan adalah gembalanya. Halo, bulan.\nTidurlah, sayang, tidurlah.\nPohon-pohon tinggi berdiri sangat diam.\nTak satu daun pun bergerak sekarang.\nAngin pun sudah pergi tidur.\nBahkan sungai ikut tidur. Ssst.\nMimpimu lembut dan hangat.\nPejamkan matamu, sayangku.\nAku di sini. Aku akan tinggal.\nTidurlah, sayang, tidurlah. Tidur, tidur, tidur.",
+  v: [["lambs", "anak domba"], ["shepherd", "gembala"], ["still", "diam tak bergerak"], ["river", "sungai"], ["dreams", "mimpi"]]
+},
+{
+  t: "Star Light, Star Bright",
+  sc: "night",
+  e: ["⭐","🌠","🏡","🌙"],
+  src: "traditional nursery rhyme",
+  en: "Star light, star bright,\nfirst star I see tonight.\nThere it is! Right above the tree.\nOne little light in all that dark.\nI wish I may, I wish I might,\nhave the wish I wish tonight.\nWhat shall we wish for, little one?\nA sunny day? A big red ball?\nOr just this: a happy home.\nThat wish came true already. Look around.\nThank you, first star. Thank you.\nMore stars are coming now. Two. Three.\nGood night, star light. Good night, star bright.",
+  id: "Cahaya bintang, bintang terang,\nbintang pertama yang kulihat malam ini.\nItu dia! Tepat di atas pohon.\nSatu cahaya kecil di tengah gelap.\nAku berharap, aku memohon,\nsemoga permintaanku malam ini terwujud.\nKita mau minta apa, sayang?\nHari yang cerah? Bola merah besar?\nAtau ini saja: rumah yang bahagia.\nPermintaan itu sudah terwujud. Lihat sekeliling.\nTerima kasih, bintang pertama. Terima kasih.\nBintang lain mulai datang. Dua. Tiga.\nSelamat malam, cahaya bintang. Selamat malam, bintang terang.",
+  v: [["wish", "harapan/permintaan"], ["tonight", "malam ini"], ["bright", "terang"], ["dark", "gelap"], ["true", "menjadi nyata"]]
+},
+{
+  t: "Pussycat, Pussycat",
+  sc: "day",
+  e: ["🐈","👑","🐭","🥛"],
+  src: "Mother Goose",
+  en: "Pussycat, pussycat, where have you been?\nI have been to London to see the Queen.\nAll that way? On your four little paws?\nPussycat, pussycat, what did you there?\nI frightened a little mouse under her chair!\nSqueak! said the mouse. Away it ran.\nThe Queen laughed. Ha, ha, ha!\nShe gave the cat a bowl of cream.\nLick, lick, lick. All gone. Mmm.\nThen home came the cat. So far to walk.\nNow she sleeps beside the fire.\nPurr, purr, purr. What a day.\nGood night, travelling pussycat.",
+  id: "Kucing, kucing, kamu dari mana?\nAku pergi ke London untuk menemui Ratu.\nSejauh itu? Dengan empat kaki kecilmu?\nKucing, kucing, apa yang kamu lakukan di sana?\nAku menakuti seekor tikus kecil di bawah kursinya!\nCit! kata tikus itu. Ia kabur.\nRatu tertawa. Ha, ha, ha!\nIa memberi kucing itu semangkuk krim.\nJilat, jilat, jilat. Habis semua. Mmm.\nLalu kucing itu pulang. Jauh sekali jalannya.\nSekarang ia tidur di samping api.\nPrrr, prrr, prrr. Hari yang luar biasa.\nSelamat malam, kucing petualang.",
+  v: [["Queen", "Ratu"], ["paws", "kaki hewan"], ["frightened", "menakuti"], ["cream", "krim susu"], ["purr", "dengkuran kucing"]]
+},
+{
+  t: "Ride a Cock Horse",
+  sc: "day",
+  e: ["🐴","👗","🔔","💍"],
+  src: "Mother Goose",
+  en: "Ride a cock horse to Banbury Cross.\nUp on my knee. Here we go!\nBumpety, bumpety, bump. Trot, trot, trot.\nTo see a fine lady upon a white horse.\nHer horse has bells upon its toes.\nRing, ring, ring. Can you hear them?\nShe has rings upon her fingers too.\nShine, shine. So pretty.\nShe shall have music wherever she goes.\nLa, la, la. Ring, ring, ring.\nFaster now! Bumpety, bumpety, bump!\nSlower. Slower. Whoa, horse. Stop.\nDown you come. What a good ride!",
+  id: "Berkuda-kudaan ke Banbury Cross.\nNaik ke atas lututku. Ayo jalan!\nDug, dug, dug. Tap, tap, tap.\nMelihat nyonya cantik di atas kuda putih.\nKudanya punya lonceng di kakinya.\nKring, kring, kring. Kamu dengar?\nIa juga punya cincin di jarinya.\nBerkilau, berkilau. Cantik sekali.\nAda musik di mana pun ia pergi.\nLa, la, la. Kring, kring, kring.\nLebih cepat! Dug, dug, dug!\nLebih lambat. Lebih lambat. Wooo, kuda. Berhenti.\nTurun, yuk. Tunggangan yang menyenangkan!",
+  v: [["ride", "menunggang/tunggangan"], ["trot", "berlari kecil seperti kuda"], ["bells", "lonceng"], ["rings", "cincin"], ["music", "musik"]]
+},
+{
+  t: "One, Two, Buckle My Shoe",
+  sc: "day",
+  e: ["👟","🚪","🪵","🐔"],
+  src: "Mother Goose",
+  en: "One, two, buckle my shoe.\nThree, four, knock at the door.\nKnock, knock! Who is there?\nFive, six, pick up sticks.\nOne stick. Two sticks. A big pile!\nSeven, eight, lay them straight.\nStraight in a row. Just so.\nNine, ten, a big fat hen.\nCluck, cluck! Good morning, hen.\nCount them all again with me.\nOne, two, three, four, five.\nSix, seven, eight, nine, ten.\nTen little fingers. Ten little toes.\nWiggle them all. Wiggle, wiggle!\nWell counted, clever baby!",
+  id: "Satu, dua, pasang gesper sepatuku.\nTiga, empat, ketuk pintunya.\nTok, tok! Siapa di sana?\nLima, enam, pungut kayu-kayunya.\nSatu kayu. Dua kayu. Tumpukan besar!\nTujuh, delapan, susun dengan lurus.\nLurus dalam satu baris. Nah, begitu.\nSembilan, sepuluh, seekor ayam yang gemuk.\nPetok, petok! Selamat pagi, ayam.\nHitung semuanya lagi bersamaku.\nSatu, dua, tiga, empat, lima.\nEnam, tujuh, delapan, sembilan, sepuluh.\nSepuluh jari tangan. Sepuluh jari kaki.\nGoyangkan semuanya. Goyang, goyang!\nHitungannya bagus, bayi cerdas!",
+  v: [["buckle", "gesper"], ["knock", "mengetuk"], ["sticks", "kayu kecil"], ["straight", "lurus"], ["hen", "ayam betina"]]
+},
+{
+  t: "Rain, Rain, Go Away",
+  sc: "rain",
+  e: ["🌧️","🧱","📖","🪣"],
+  src: "Mother Goose",
+  en: "Rain, rain, go away.\nCome again another day.\nLittle baby wants to play.\nRain, rain, go away.\nTap, tap, tap on the window.\nThe rain does not want to go.\nSo we play inside instead.\nBuild a tower. Up, up, up. Crash!\nRoll the ball across the floor.\nRead a book. Turn the pages.\nLook! The rain is slowing down.\nThe clouds are moving away now.\nDrip. Drip. Drip. Now nothing.\nOut comes the sun. A puddle to jump in!\nSplash! Thank you, rain. Goodbye.",
+  id: "Hujan, hujan, pergilah.\nDatang lagi ya lain hari.\nBayi kecil ingin bermain.\nHujan, hujan, pergilah.\nTik, tik, tik di jendela.\nHujannya belum mau pergi.\nJadi kita bermain di dalam saja.\nBangun menara. Naik, naik, naik. Bruk!\nGulingkan bola melintasi lantai.\nBaca buku. Balik halamannya.\nLihat! Hujannya mulai reda.\nAwannya mulai bergerak menjauh.\nTes. Tes. Tes. Sekarang berhenti.\nMatahari keluar. Ada genangan untuk dilompati!\nCeburr! Terima kasih, hujan. Selamat jalan.",
+  v: [["away", "pergi menjauh"], ["window", "jendela"], ["tower", "menara"], ["clouds", "awan"], ["puddle", "genangan air"]]
+},
+{
+  t: "The Three Little Pigs",
+  sc: "day",
+  e: ["🐷","🌾","🪵","🧱","🌬️"],
+  src: "Joseph Jacobs",
+  en: "Three little pigs went out to build houses.\nThe first pig built a house of straw.\nQuick and easy! Now I can play.\nThe second pig built a house of sticks.\nTap, tap, tap. Done! Now I can play.\nThe third pig built a house of bricks.\nHeavy work. Slow work. All day long.\nAlong came a big wind. Whoosh!\nDown went the straw house. Whoosh!\nDown went the stick house too!\nThe two pigs ran to their brother.\nBut the brick house stood strong.\nKnock, knock. Come in, brothers. You are safe.\nThree little pigs, warm and snug inside.",
+  id: "Tiga babi kecil pergi membangun rumah.\nBabi pertama membangun rumah dari jerami.\nCepat dan mudah! Sekarang aku bisa bermain.\nBabi kedua membangun rumah dari kayu.\nTok, tok, tok. Selesai! Sekarang aku bisa bermain.\nBabi ketiga membangun rumah dari batu bata.\nKerja berat. Kerja lambat. Sepanjang hari.\nDatanglah angin yang besar. Wuush!\nRumah jerami itu roboh. Wuush!\nRumah kayu itu roboh juga!\nKedua babi itu berlari ke rumah kakaknya.\nTapi rumah batu bata itu berdiri kuat.\nTok, tok. Masuklah, kakak-kakak. Kalian aman.\nTiga babi kecil, hangat dan nyaman di dalam.",
+  v: [["build", "membangun"], ["straw", "jerami"], ["sticks", "kayu"], ["bricks", "batu bata"], ["strong", "kuat"]]
+},
+{
+  t: "The Three Billy Goats Gruff",
+  sc: "garden",
+  e: ["🐐","🌉","👹","🌿"],
+  src: "Asbjørnsen & Moe",
+  en: "Three billy goats wanted to cross the bridge.\nOn the other side, sweet green grass!\nBut under the bridge lived a grumpy troll.\nTrip, trap, trip, trap. Here comes the small goat.\nWho is on my bridge? said the troll.\nWait for my big brother, said the small goat.\nTrip, trap. Here comes the middle goat.\nWait for my big brother, he said too.\nTrip, trap! Here comes the big billy goat.\nHis horns are long. His feet are heavy.\nOff you go, troll! Splash! Into the water.\nThe troll swam away and never came back.\nAnd the three goats ate the sweet grass.\nMunch, munch, munch. All day long.",
+  id: "Tiga kambing jantan ingin melintasi jembatan.\nDi seberang ada rumput hijau yang manis!\nTapi di bawah jembatan hidup seekor troll yang pemarah.\nTap, tap, tap, tap. Datang kambing yang kecil.\nSiapa di jembatanku? kata troll.\nTunggu kakakku yang besar, kata kambing kecil.\nTap, tap. Datang kambing yang sedang.\nTunggu kakakku yang besar, katanya juga.\nTap, tap! Datang kambing jantan yang besar.\nTanduknya panjang. Kakinya berat.\nPergi kamu, troll! Ceburr! Masuk ke air.\nTroll itu berenang pergi dan tak pernah kembali.\nDan ketiga kambing itu makan rumput yang manis.\nKriuk, kriuk, kriuk. Sepanjang hari.",
+  v: [["bridge", "jembatan"], ["cross", "melintasi"], ["troll", "troll, raksasa dalam cerita"], ["horns", "tanduk"], ["munch", "mengunyah dengan lahap"]]
+},
+{
+  t: "The Gingerbread Man",
+  sc: "day",
+  e: ["🍪","👵","🐄","🐕","🦆"],
+  src: "traditional English tale",
+  en: "An old woman baked a gingerbread man.\nTwo currants for eyes. A cherry for a nose.\nInto the oven. Bake, bake, bake.\nShe opened the door and out he jumped!\nRun, run, as fast as you can!\nYou cannot catch me, said the gingerbread man.\nPast the cow. Moo! Too slow.\nPast the horse. Neigh! Too slow.\nPast the dog. Woof! Too slow.\nRun, run, run. Nobody can catch him.\nThen he came to a wide river.\nHow will I cross? Oh dear.\nA kind duck gave him a ride.\nQuack! Safe on the other side. Hooray!",
+  id: "Seorang nenek memanggang kue orang-orangan.\nDua kismis untuk mata. Satu ceri untuk hidung.\nMasuk ke oven. Panggang, panggang, panggang.\nIa membuka pintunya dan kuenya melompat keluar!\nLari, lari, secepat yang kau bisa!\nKamu tidak bisa menangkapku, kata kue itu.\nMelewati sapi. Moo! Terlalu lambat.\nMelewati kuda. Hiii! Terlalu lambat.\nMelewati anjing. Guk! Terlalu lambat.\nLari, lari, lari. Tak ada yang bisa menangkapnya.\nLalu ia sampai di sungai yang lebar.\nBagaimana aku menyeberang? Aduh.\nSeekor bebek yang baik memberinya tumpangan.\nKwek! Sampai dengan aman di seberang. Hore!",
+  v: [["baked", "memanggang"], ["currants", "kismis kecil"], ["oven", "oven"], ["catch", "menangkap"], ["river", "sungai"]]
+},
+{
+  t: "Henny Penny",
+  sc: "garden",
+  e: ["🐔","🌰","🦉","🦆","🪿"],
+  src: "English folk tale",
+  en: "Henny Penny was eating in the garden.\nBonk! Something fell on her head.\nOh no! The sky is falling!\nI must go and tell the King.\nOff she went. Cluck, cluck, cluck.\nShe met Cocky Locky. The sky is falling!\nShe met Ducky Lucky. The sky is falling!\nShe met Goosey Loosey. The sky is falling!\nAll of them ran down the road together.\nThen a wise old owl looked down.\nWhat fell on your head? he asked.\nHenny Penny looked. Oh! An acorn.\nJust a little acorn from the tree.\nEverybody laughed. Cluck! Quack! Honk! Hoo!",
+  id: "Henny Penny sedang makan di taman.\nDuk! Ada sesuatu jatuh di kepalanya.\nOh tidak! Langitnya runtuh!\nAku harus pergi memberi tahu Raja.\nIa pun pergi. Petok, petok, petok.\nIa bertemu Cocky Locky. Langitnya runtuh!\nIa bertemu Ducky Lucky. Langitnya runtuh!\nIa bertemu Goosey Loosey. Langitnya runtuh!\nMereka semua berlari di jalan bersama-sama.\nLalu seekor burung hantu tua yang bijak menengok ke bawah.\nApa yang jatuh di kepalamu? tanyanya.\nHenny Penny melihat. Oh! Sebuah biji ek.\nHanya biji ek kecil dari pohon.\nSemuanya tertawa. Petok! Kwek! Honk! Hu!",
+  v: [["garden", "taman"], ["falling", "jatuh/runtuh"], ["road", "jalan"], ["wise", "bijak"], ["acorn", "biji pohon ek"]]
+},
+{
+  t: "The Elves and the Shoemaker",
+  sc: "night",
+  e: ["🧝","👞","🧵","🕯️"],
+  src: "Brothers Grimm",
+  en: "A shoemaker had no more leather. Only enough for one pair.\nHe cut the pieces and went to bed.\nIn the night, tap, tap, tap.\nTiny elves came in. So small!\nSnip, stitch, tap. They worked all night.\nIn the morning: two beautiful shoes!\nWho did this? said the shoemaker.\nThe next night they came again. Tap, tap.\nAnd again. And again. So many shoes!\nOne night the shoemaker peeped and saw them.\nThank you, little elves! he whispered.\nHe made them tiny coats and tiny shoes.\nThe elves danced and laughed and skipped away.\nGood night, kind little elves.",
+  id: "Seorang tukang sepatu tak punya kulit lagi. Hanya cukup untuk satu pasang.\nIa memotong bahannya lalu pergi tidur.\nDi tengah malam, tok, tok, tok.\nPeri-peri kecil masuk. Kecil sekali!\nKret, jahit, tok. Mereka bekerja sepanjang malam.\nPaginya: dua sepatu yang indah!\nSiapa yang membuat ini? kata tukang sepatu.\nMalam berikutnya mereka datang lagi. Tok, tok.\nDan lagi. Dan lagi. Banyak sekali sepatunya!\nSuatu malam tukang sepatu mengintip dan melihat mereka.\nTerima kasih, peri-peri kecil! bisiknya.\nIa membuatkan mereka mantel kecil dan sepatu kecil.\nPeri-peri itu menari dan tertawa dan melompat pergi.\nSelamat malam, peri kecil yang baik.",
+  v: [["leather", "kulit bahan sepatu"], ["elves", "peri kecil"], ["stitch", "menjahit"], ["whispered", "berbisik"], ["danced", "menari"]]
+},
+{
+  t: "The Ant and the Grasshopper",
+  sc: "snow",
+  e: ["🦗","🐜","❄️","🌾"],
+  src: "Aesop's Fables",
+  en: "All summer long the grasshopper sang.\nChirp, chirp! Come and play, ant!\nThe ant did not stop. She carried a seed.\nStep, step, step. Then another seed.\nWinter is coming, said the little ant.\nWinter? said the grasshopper. Not today! Sing!\nThe leaves fell. The days grew short.\nThen the snow came. Cold, cold, cold.\nThe grasshopper had nothing to eat.\nHe knocked on the ant's door. Please help.\nCome in, said the ant. Here is food.\nShare and be warm, little friend.\nNext summer we will work together.\nAnd we will sing together too.",
+  id: "Sepanjang musim panas belalang bernyanyi.\nKrik, krik! Ayo bermain, semut!\nSemut itu tidak berhenti. Ia membawa sebutir biji.\nLangkah, langkah, langkah. Lalu satu biji lagi.\nMusim dingin akan datang, kata semut kecil.\nMusim dingin? kata belalang. Bukan hari ini! Bernyanyi saja!\nDedaunan berjatuhan. Harinya makin pendek.\nLalu salju datang. Dingin, dingin, dingin.\nBelalang itu tidak punya makanan.\nIa mengetuk pintu semut. Tolong aku.\nMasuklah, kata semut. Ini makanannya.\nMari berbagi dan hangat bersama, kawan kecil.\nMusim panas depan kita bekerja bersama.\nDan kita bernyanyi bersama juga.",
+  v: [["summer", "musim panas"], ["grasshopper", "belalang"], ["seed", "biji"], ["winter", "musim dingin"], ["share", "berbagi"]]
+},
+{
+  t: "The Fox and the Grapes",
+  sc: "garden",
+  e: ["🦊","🍇","🌿","🪜"],
+  src: "Aesop's Fables",
+  en: "A hungry fox walked through the garden.\nLook! Grapes on the vine. Big and purple.\nThey look so juicy. Mmm.\nBut they hang high above his head.\nHe jumped. Boing! Not high enough.\nHe jumped again. Boing! Still too high.\nHe ran and jumped. Boing, boing!\nHis legs got tired. His nose got hot.\nHe could not reach the grapes at all.\nSo he walked away and said,\nthose grapes are sour anyway!\nBut they were not sour. They were sweet.\nPoor silly fox. Try a ladder next time.",
+  id: "Seekor rubah yang lapar berjalan melewati taman.\nLihat! Anggur di sulurnya. Besar dan ungu.\nKelihatannya berair sekali. Mmm.\nTapi anggurnya tergantung tinggi di atas kepalanya.\nIa melompat. Boing! Belum cukup tinggi.\nIa melompat lagi. Boing! Masih terlalu tinggi.\nIa berlari lalu melompat. Boing, boing!\nKakinya lelah. Hidungnya jadi panas.\nIa tidak bisa menjangkau anggurnya sama sekali.\nJadi ia pergi sambil berkata,\nanggur itu asam kok!\nPadahal tidak asam. Anggurnya manis.\nKasihan rubah konyol. Coba pakai tangga lain kali.",
+  v: [["fox", "rubah"], ["grapes", "anggur"], ["vine", "sulur tanaman"], ["juicy", "berair banyak"], ["sour", "asam"]]
+},
+{
+  t: "The Town Mouse and the Country Mouse",
+  sc: "garden",
+  e: ["🐭","🐁","🧀","🌽"],
+  src: "Aesop's Fables",
+  en: "A town mouse went to see his cousin.\nHis cousin lived in the quiet country.\nHere is my dinner, said the country mouse.\nCorn and roots and a little water.\nOh, said the town mouse. So plain!\nCome to town. We eat cake there!\nSo they went to the big town house.\nCake! Cheese! Jelly! What a feast!\nBut then, woof! A big dog barked.\nRun! Hide! Under the floor. Squeak!\nI am going home, said the country mouse.\nMy dinner is plain, but I eat it in peace.\nBack to the quiet country he went.\nCorn and roots and a good long sleep.",
+  id: "Seekor tikus kota pergi menemui sepupunya.\nSepupunya tinggal di desa yang sepi.\nIni makan malamku, kata tikus desa.\nJagung dan akar-akaran dan sedikit air.\nOh, kata tikus kota. Sederhana sekali!\nAyo ke kota. Di sana kita makan kue!\nJadi mereka pergi ke rumah besar di kota.\nKue! Keju! Puding! Pesta yang luar biasa!\nTapi lalu, guk! Seekor anjing besar menyalak.\nLari! Sembunyi! Di bawah lantai. Cit!\nAku mau pulang, kata tikus desa.\nMakananku sederhana, tapi aku memakannya dengan tenang.\nIa kembali ke desa yang sepi.\nJagung dan akar-akaran dan tidur yang panjang.",
+  v: [["cousin", "sepupu"], ["country", "desa/pedesaan"], ["feast", "pesta makan"], ["barked", "menyalak"], ["peace", "ketenangan"]]
+},
+{
+  t: "The Tale of Peter Rabbit",
+  sc: "garden",
+  e: ["🐇","🥬","🥕","🚪"],
+  src: "Beatrix Potter, 1902",
+  en: "Peter Rabbit had a blue coat and no shoes.\nDo not go in the garden, said Mother.\nBut Peter went. Hop, hop, hop.\nUnder the gate. Squeeze, squeeze. In!\nLettuce! Beans! Radishes! Munch, munch, munch.\nHe ate and ate and ate.\nThen he felt rather sick. Oh dear.\nThe gardener saw him. Stop, little thief!\nRun, Peter, run! Round the pond.\nHe lost one shoe. Then the other.\nHe lost his little blue coat too.\nUnder the gate at last. Home!\nMother put him to bed with tea.\nSleep well, Peter. No more radishes today.",
+  id: "Peter Kelinci punya mantel biru dan tidak pakai sepatu.\nJangan masuk ke kebun, kata Ibu.\nTapi Peter tetap pergi. Hop, hop, hop.\nLewat bawah gerbang. Selip, selip. Masuk!\nSelada! Buncis! Lobak! Kriuk, kriuk, kriuk.\nIa makan dan makan dan makan.\nLalu perutnya mulai tidak enak. Aduh.\nPak tukang kebun melihatnya. Berhenti, pencuri kecil!\nLari, Peter, lari! Mengelilingi kolam.\nIa kehilangan satu sepatu. Lalu yang satunya.\nMantel birunya yang kecil hilang juga.\nAkhirnya lewat bawah gerbang. Pulang!\nIbu menidurkannya dengan segelas teh.\nTidur yang nyaman, Peter. Jangan makan lobak lagi hari ini.",
+  v: [["coat", "mantel"], ["garden", "kebun"], ["lettuce", "selada"], ["munch", "mengunyah lahap"], ["thief", "pencuri"]]
+},
+{
+  t: "Kancil and the Crocodiles",
+  sc: "water",
+  e: ["🦌","🐊","🍉","🌴"],
+  src: "Indonesian folk tale",
+  en: "Kancil is a little mouse deer. Very clever.\nHe wants the sweet fruit across the river.\nBut the river is deep. And wide.\nAnd in the river live the crocodiles.\nSnap, snap! Hello, crocodiles, says Kancil.\nThe King wants me to count you all!\nLine up, please. Nose to tail.\nThe crocodiles line up across the river.\nOne, two, three, four, five, six!\nHop, hop, hop. Kancil counts on their backs.\nSeven, eight, nine, ten! Thank you!\nAnd there he is, safe on the other side.\nMunch, munch. What sweet fruit!\nClever little Kancil. Well done.",
+  id: "Kancil itu hewan kecil. Cerdik sekali.\nIa ingin buah manis di seberang sungai.\nTapi sungainya dalam. Dan lebar.\nDan di sungai itu hidup buaya-buaya.\nKlap, klap! Halo, buaya, kata Kancil.\nRaja menyuruhku menghitung kalian semua!\nBerbaris ya. Hidung ke ekor.\nBuaya-buaya berbaris melintasi sungai.\nSatu, dua, tiga, empat, lima, enam!\nHop, hop, hop. Kancil menghitung di atas punggung mereka.\nTujuh, delapan, sembilan, sepuluh! Terima kasih!\nDan sampailah ia dengan aman di seberang.\nKriuk, kriuk. Buahnya manis sekali!\nKancil kecil yang cerdik. Hebat.",
+  v: [["clever", "cerdik"], ["river", "sungai"], ["crocodiles", "buaya"], ["count", "menghitung"], ["safe", "aman"]]
+},
+{
+  t: "The Monkey and the Crocodile",
+  sc: "water",
+  e: ["🐒","🐊","🍎","🌊"],
+  src: "the Panchatantra",
+  en: "A monkey lived in a tall fruit tree.\nEvery day he ate the sweet red fruit.\nA crocodile swam up. May I have one?\nOf course, said the kind monkey. Here!\nEvery day the monkey threw down fruit.\nThey became good friends. Splash! Munch!\nCome to my home across the water,\nsaid the crocodile. Sit on my back.\nSo off they swam. Splash, splash.\nBut halfway there the crocodile said something silly.\nOh! said the monkey. I left my heart in the tree!\nTake me back and I will get it.\nBack they swam. Up went the monkey. Safe!\nClever monkey. He stayed in his tree.",
+  id: "Seekor monyet tinggal di pohon buah yang tinggi.\nSetiap hari ia makan buah merah yang manis.\nSeekor buaya berenang mendekat. Boleh aku minta satu?\nTentu, kata monyet yang baik hati. Ini!\nSetiap hari monyet itu melempar buah ke bawah.\nMereka jadi berteman baik. Ceburr! Kriuk!\nDatanglah ke rumahku di seberang air,\nkata buaya. Duduk di punggungku.\nJadi mereka pun berenang. Cebur, cebur.\nTapi di tengah jalan buaya berkata sesuatu yang konyol.\nOh! kata monyet. Hatiku tertinggal di pohon!\nAntar aku kembali, nanti aku ambil.\nMereka berenang kembali. Monyet naik ke pohon. Aman!\nMonyet yang cerdik. Ia tetap tinggal di pohonnya.",
+  v: [["monkey", "monyet"], ["crocodile", "buaya"], ["friends", "berteman"], ["halfway", "di tengah jalan"], ["clever", "cerdik"]]
+},
+{
+  t: "Momotaro, the Peach Boy",
+  sc: "day",
+  e: ["🍑","👦","🐕","🐒","🐦"],
+  src: "Japanese folk tale",
+  en: "An old woman found a giant peach in the river.\nBump, bump. It floated to her feet.\nShe took it home. Let us eat it!\nBut when she cut it open, surprise!\nInside was a little boy. Hello!\nWe will call you Momotaro, they said.\nPeach Boy grew big and strong and kind.\nOne day he walked out to help people.\nA dog came with him. Woof!\nA monkey came too. Ooh, ooh!\nAnd a bird flew above them. Caw!\nTogether they were brave. Together they were strong.\nAnd home they came with happy news.\nWell done, Momotaro. Well done, friends.",
+  id: "Seorang nenek menemukan buah persik raksasa di sungai.\nDuk, duk. Buahnya mengapung sampai ke kakinya.\nIa membawanya pulang. Ayo kita makan!\nTapi saat dibelah, ternyata ada kejutan!\nDi dalamnya ada seorang anak lelaki. Halo!\nKami akan memanggilmu Momotaro, kata mereka.\nAnak Persik tumbuh besar dan kuat dan baik hati.\nSuatu hari ia pergi untuk menolong orang.\nSeekor anjing ikut dengannya. Guk!\nSeekor monyet ikut juga. Uu, uu!\nDan seekor burung terbang di atas mereka. Kaak!\nBersama mereka jadi berani. Bersama mereka jadi kuat.\nDan mereka pulang membawa kabar bahagia.\nHebat, Momotaro. Hebat, kawan-kawan.",
+  v: [["peach", "buah persik"], ["floated", "mengapung"], ["strong", "kuat"], ["brave", "berani"], ["together", "bersama"]]
+},
+{
+  t: "Milk Time",
+  sc: "night",
+  e: ["🍼","👶","🌙","💤"],
+  en: "It is dark outside. You are awake.\nHungry? I know. I know.\nCome here, little one. Into my arms.\nWarm milk. Slow, slow. There you go.\nGlug, glug, glug. Little swallows.\nYour hand holds my finger. Tight.\nYour eyes look up at me.\nHello, you. Hello, hello.\nThe house is so quiet now.\nOnly you and me and the milk.\nSlower now. Glug. Glug.\nYour eyes are closing. Almost done.\nOne last sip. There.\nBack to bed. Sleep, sleep, sleep.",
+  id: "Di luar masih gelap. Kamu terbangun.\nLapar? Aku tahu. Aku tahu.\nSini, sayang. Ke dalam pelukanku.\nSusu hangat. Perlahan, perlahan. Nah, begitu.\nGlek, glek, glek. Telanan kecil.\nTanganmu menggenggam jariku. Kuat.\nMatamu memandangku ke atas.\nHalo, kamu. Halo, halo.\nRumahnya sepi sekali sekarang.\nHanya kamu dan aku dan susunya.\nMakin lambat sekarang. Glek. Glek.\nMatamu mulai menutup. Hampir habis.\nSatu seruputan terakhir. Nah.\nKembali ke tempat tidur. Tidur, tidur, tidur.",
+  v: [["hungry", "lapar"], ["milk", "susu"], ["swallows", "telanan"], ["tight", "kuat/erat"], ["quiet", "sepi/tenang"]]
+},
+{
+  t: "Sweet, Sweet Mango",
+  sc: "garden",
+  e: ["🥭","🌳","🔪","😋"],
+  en: "Look at this mango. Green and gold.\nHold it. Heavy and smooth and cool.\nSmell the skin. Ahh! So sweet.\nCut it open. The knife goes shk.\nInside it is orange. Bright orange!\nSo juicy. Look, it drips.\nA little piece for you. Mmm!\nSoft on your gums. Suck, suck.\nJuice on your chin. Juice on your hands.\nJuice everywhere! What a mess.\nWipe, wipe, wipe. All clean.\nOne more piece? Yes, please.\nThe mango tree gave us this.\nThank you, mango tree. Thank you.",
+  id: "Lihat mangga ini. Hijau dan keemasan.\nPegang. Berat dan halus dan sejuk.\nCium kulitnya. Ahh! Manis sekali.\nBelah. Pisaunya berbunyi srek.\nDi dalamnya oranye. Oranye cerah!\nBerair sekali. Lihat, menetes.\nSepotong kecil untukmu. Mmm!\nLembut di gusimu. Sedot, sedot.\nAirnya di dagumu. Airnya di tanganmu.\nAirnya di mana-mana! Belepotan sekali.\nUsap, usap, usap. Bersih semua.\nSatu potong lagi? Iya, boleh.\nPohon mangga memberi kita ini.\nTerima kasih, pohon mangga. Terima kasih.",
+  v: [["mango", "mangga"], ["smooth", "halus"], ["juicy", "berair banyak"], ["drips", "menetes"], ["mess", "belepotan/berantakan"]]
+},
+{
+  t: "The Fan Goes Round",
+  sc: "day",
+  e: ["🌀","🪟","🍃","📄"],
+  en: "Look up at the ceiling. What is that?\nThe fan! Round and round it goes.\nWhirr, whirr, whirr. Do you hear it?\nOne blade. Two blades. Three. Four.\nToo fast to count them now!\nThe wind comes down on your face.\nCool wind. Whoosh. It moves your hair.\nThe curtain moves too. Sway, sway.\nA paper on the table lifts up. Flap!\nRound and round. It never stops.\nWhirr, whirr. Such a busy fan.\nNow we turn it slower. Slow, slow.\nGood night, little fan. Keep us cool.",
+  id: "Lihat ke atas, ke langit-langit. Apa itu?\nKipasnya! Berputar dan berputar.\nNguing, nguing, nguing. Kamu dengar?\nSatu bilah. Dua bilah. Tiga. Empat.\nTerlalu cepat untuk dihitung sekarang!\nAnginnya turun ke wajahmu.\nAngin yang sejuk. Wuush. Rambutmu bergerak.\nGordennya bergerak juga. Ayun, ayun.\nSelembar kertas di meja terangkat. Kepak!\nBerputar dan berputar. Tidak pernah berhenti.\nNguing, nguing. Kipas yang sibuk sekali.\nSekarang kita perlambat. Lambat, lambat.\nSelamat malam, kipas kecil. Jaga kami tetap sejuk.",
+  v: [["ceiling", "langit-langit"], ["fan", "kipas"], ["blade", "bilah kipas"], ["curtain", "gorden"], ["cool", "sejuk"]]
+},
+{
+  t: "Shoes On, Let's Go",
+  sc: "day",
+  e: ["👟","🚪","🦶","🌳"],
+  en: "Where are we going? Outside!\nFirst we need your shoes. Where are they?\nUnder the chair. Found them!\nGive me one foot. In it goes.\nPush, push. Toes all the way in.\nNow the strap. Rrrip! Done.\nGive me the other foot. In it goes.\nPush, push, push. There!\nTwo shoes on two little feet.\nStand up. Stamp, stamp. Do they fit?\nThey fit! Now the door.\nTurn the handle. Click. Open!\nOut we go. Bye, house!\nHold my hand. Off we walk.",
+  id: "Kita mau ke mana? Ke luar!\nPertama kita butuh sepatumu. Di mana ya?\nDi bawah kursi. Ketemu!\nBerikan satu kakimu. Masuk.\nDorong, dorong. Jari kaki masuk semua.\nSekarang perekatnya. Krek! Selesai.\nBerikan kaki yang lain. Masuk.\nDorong, dorong, dorong. Nah!\nDua sepatu di dua kaki kecil.\nBerdiri. Hentak, hentak. Pas tidak?\nPas! Sekarang pintunya.\nPutar pegangannya. Klik. Terbuka!\nKita keluar. Selamat tinggal, rumah!\nPegang tanganku. Ayo jalan.",
+  v: [["shoes", "sepatu"], ["strap", "tali/perekat sepatu"], ["stamp", "menghentak kaki"], ["fit", "pas ukurannya"], ["handle", "pegangan pintu"]]
+},
+{
+  t: "Fireflies",
+  sc: "night",
+  e: ["✨","🌳","🌙","🪴"],
+  en: "The sun is gone. The garden is dark.\nSit with me here on the step.\nWait. Watch. Very quiet now.\nThere! A little green light.\nOn. Off. On. Off.\nA firefly! Hello, little light.\nThere is another one. And another.\nMany little lights now, floating slowly.\nUp and down. Left and right.\nThey blink to say hello to each other.\nOne comes close to your hand. Ooh!\nOff it goes again. Goodbye.\nThe fireflies dance in the dark garden.\nGood night, little lights. Good night.",
+  id: "Mataharinya sudah pergi. Tamannya gelap.\nDuduk bersamaku di tangga sini.\nTunggu. Perhatikan. Tenang sekali sekarang.\nItu! Sebuah cahaya hijau kecil.\nNyala. Mati. Nyala. Mati.\nKunang-kunang! Halo, cahaya kecil.\nAda satu lagi. Dan satu lagi.\nBanyak cahaya kecil sekarang, melayang perlahan.\nNaik dan turun. Kiri dan kanan.\nMereka berkedip untuk saling menyapa.\nSatu mendekat ke tanganmu. Ooh!\nIa terbang lagi. Selamat jalan.\nKunang-kunang menari di taman yang gelap.\nSelamat malam, cahaya kecil. Selamat malam.",
+  v: [["dark", "gelap"], ["firefly", "kunang-kunang"], ["blink", "berkedip"], ["floating", "melayang"], ["dance", "menari"]]
+},
+{
+  t: "The Big Blue Umbrella",
+  sc: "rain",
+  e: ["☂️","🌧️","🐌","🪣"],
+  en: "Listen. Rain on the roof again.\nBut today we are going out!\nHere is the big blue umbrella.\nPush it up. Whoosh! It opens.\nSo big! A little roof for us.\nUnder we go. You and me.\nOut the door. Into the rain.\nTap, tap, tap on the umbrella.\nThe rain cannot reach us. Dry feet!\nLook at the puddles. Jump! Splash!\nA snail on the wall. Hello, snail.\nHome again. Shake the umbrella. Shake, shake.\nDown it comes. Click. Closed.\nThank you, big blue umbrella.",
+  id: "Dengar. Hujan di atap lagi.\nTapi hari ini kita mau keluar!\nIni payung biru yang besar.\nDorong ke atas. Wuush! Terbuka.\nBesar sekali! Seperti atap kecil untuk kita.\nMasuk ke bawahnya. Kamu dan aku.\nKeluar pintu. Masuk ke hujan.\nTik, tik, tik di payungnya.\nHujannya tidak bisa mengenai kita. Kaki tetap kering!\nLihat genangannya. Lompat! Ceburr!\nAda siput di dinding. Halo, siput.\nPulang lagi. Kibaskan payungnya. Kibas, kibas.\nDitutup ke bawah. Klik. Tertutup.\nTerima kasih, payung biru yang besar.",
+  v: [["umbrella", "payung"], ["roof", "atap"], ["dry", "kering"], ["puddles", "genangan air"], ["snail", "siput"]]
 }
 ];

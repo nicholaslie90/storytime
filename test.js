@@ -5,7 +5,7 @@ const fs = require('fs');
 const STORIES = eval(fs.readFileSync(__dirname + '/stories.js', 'utf8') + ';STORIES');
 const html = fs.readFileSync(__dirname + '/index.html', 'utf8');
 
-assert.strictEqual(STORIES.length, 60, 'need 60 stories');
+assert.strictEqual(STORIES.length, 90, 'need 90 stories');
 
 // The scenes the CSS and the FX table actually know about.
 const SCENES = ['day', 'night', 'rain', 'snow', 'water', 'garden'];
@@ -44,12 +44,17 @@ for (const [i, s] of STORIES.entries()) {
   }
 }
 
-// At least a third of the stories credit a public-domain source.
+// At least half the stories credit a public-domain source.
 const sourced = STORIES.filter(s => s.src).length;
-assert.ok(sourced >= 20, `only ${sourced} stories credit a source, want 20+`);
+assert.ok(sourced >= STORIES.length / 2, `only ${sourced} of ${STORIES.length} stories credit a source, want half`);
 
 // Every scene is actually used, or the CSS for it is dead weight.
 for (const sc of SCENES) assert.ok(STORIES.some(s => s.sc === sc), `no story uses scene "${sc}"`);
+// And no scene carries the whole app: a rotation of one backdrop is not variety.
+for (const sc of SCENES) {
+  const n = STORIES.filter(s => s.sc === sc).length;
+  assert.ok(n <= STORIES.length * 0.45, `scene "${sc}" is used by ${n} of ${STORIES.length} stories, too many`);
+}
 
 // Rotation: day of the year picks the story, and a year reaches every one of them.
 const dayOfYear = d => Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(d.getFullYear(), 0, 1)) / 864e5) + 1;
