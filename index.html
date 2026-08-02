@@ -116,6 +116,10 @@
     background: oklch(.97 .04 250);
     box-shadow: 0 0 0 .9rem oklch(.97 .04 250 / .18), 0 0 4rem 1.4rem oklch(.97 .04 250 / .4);
   }
+  /* dawn: the sun is still low and the sky has not gone blue yet. */
+  .sc-dawn { --sky-top: oklch(.91 .1 58); --sky-bot: oklch(.83 .14 28); --hill-far: oklch(.81 .13 145); --hill-near: oklch(.71 .16 152); }
+  .sc-dawn .sun { top: 44%; right: 13%; width: 3.4rem; height: 3.4rem; }
+  @media (prefers-color-scheme: dark) { .sc-dawn { --sky-top: oklch(.43 .09 52); --sky-bot: oklch(.27 .09 22); } }
   .sc-rain { --sky-top: oklch(.8 .03 248); --sky-bot: oklch(.69 .04 238); }
   @media (prefers-color-scheme: dark) { .sc-rain { --sky-top: oklch(.32 .03 248); --sky-bot: oklch(.2 .03 238); } }
   .sc-rain .sun { opacity: .18; }
@@ -200,6 +204,10 @@
     box-shadow: 0 1.2rem 2.5rem -1rem var(--shadow);
   }
   header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  nav.top { display: flex; gap: 1rem; flex-wrap: wrap; }
+  nav.top a:empty { display: none; }
+  h2.half { font-size: 1.15rem; font-weight: 800; margin: 2rem 0 0; }
+  h2.half:first-of-type { margin-top: 1.2rem; }
   .meta { color: var(--soft); font-size: .9rem; font-weight: 700; }
   a { color: var(--brand); font-weight: 700; text-decoration: none; }
   a:hover, a:focus-visible { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 4px; }
@@ -309,7 +317,10 @@
   <div class="sheet">
     <header>
       <span class="meta" id="meta"></span>
-      <a href="#/archive" id="home">All stories</a>
+      <nav class="top">
+        <a href="#/am" id="flip"></a>
+        <a href="#/archive" id="home">All stories</a>
+      </nav>
     </header>
     <div id="view"></div>
   </div>
@@ -322,7 +333,16 @@
 function dayOfYear(d = new Date()) {
   return Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(d.getFullYear(), 0, 1)) / 864e5) + 1;
 }
-const todayIdx = () => (dayOfYear() - 1) % STORIES.length;
+
+// Two sets: morning stories (tm "am") and bedtime stories (everything else).
+// Each rotates through its own pool, so both halves of the day come round in full.
+const POOL = { am: [], pm: [] };
+STORIES.forEach((s, i) => POOL[s.tm === 'am' ? 'am' : 'pm'].push(i));
+const HALF = { am: { label: 'Morning', icon: '🌅' }, pm: { label: 'Bedtime', icon: '🌙' } };
+const halfOf = i => STORIES[i].tm === 'am' ? 'am' : 'pm';
+// ponytail: local hour, no timezone handling — the reader is in the room with the baby.
+const nowHalf = () => new Date().getHours() < 12 ? 'am' : 'pm';
+const todayIdx = (w = nowHalf()) => POOL[w][(dayOfYear() - 1) % POOL[w].length];
 
 // A different hue per story. Cycled from a fixed set: bright and cheerful, and
 // no olive/khaki band (h 70-130), which goes muddy against the green hills.
@@ -394,6 +414,7 @@ function stopped(btn) {
 const view = document.getElementById('view');
 const meta = document.getElementById('meta');
 const home = document.getElementById('home');
+const flip = document.getElementById('flip');
 const scene = document.getElementById('scene');
 const fx = document.getElementById('fx');
 const faces = ['hero', 'pal1', 'pal2', 'pal3', 'pal4'].map(id => document.getElementById(id));
@@ -402,6 +423,7 @@ const still = matchMedia('(prefers-reduced-motion: reduce)');
 // What floats through each scene: emoji, how many, and the animation to run.
 // y is the start height in % (null = scattered, for stars that stay put).
 const FX = {
+  dawn:   { e: '🐦', n: 7,  a: 'lift 15s linear infinite',     y: 100 },
   day:    { e: '✨', n: 9,  a: 'lift 13s linear infinite',     y: 100 },
   night:  { e: '⭐', n: 16, a: 'twinkle 4s ease-in-out infinite', y: null },
   rain:   { e: '💧', n: 20, a: 'fall 2.6s linear infinite',    y: -10 },
@@ -454,22 +476,27 @@ faces[0].addEventListener('animationend', e => {
 function renderArchive() {
   setScene(null);
   meta.textContent = STORIES.length + ' stories';
+  flip.textContent = '';
   home.textContent = "Today's story";
   home.href = '#/';
-  view.innerHTML = '<h1>All stories</h1><ul class="archive">' + STORIES.map((s, i) =>
-    '<li style="--i:' + i + '"><a style="--sh:' + hue(i) + '" href="#/' + (i + 1) + '">' +
-    '<span class="face">' + s.e[0] + '</span>' + esc(s.t) +
-    (i === todayIdx() ? '<span class="today">today</span>' : '') + '</a></li>'
-  ).join('') + '</ul>';
+  const list = w => '<h2 class="half">' + HALF[w].icon + ' ' + HALF[w].label + ' · ' + POOL[w].length +
+    '</h2><ul class="archive">' + POOL[w].map((i, n) =>
+      '<li style="--i:' + n + '"><a style="--sh:' + hue(i) + '" href="#/' + (i + 1) + '">' +
+      '<span class="face">' + STORIES[i].e[0] + '</span>' + esc(STORIES[i].t) +
+      (i === todayIdx(w) ? '<span class="today">today</span>' : '') + '</a></li>'
+    ).join('') + '</ul>';
+  view.innerHTML = '<h1>All stories</h1>' + list('am') + list('pm');
 }
 
 function renderStory(i) {
   const s = STORIES[i];
   setScene(i);
-  const isToday = i === todayIdx();
-  meta.textContent = isToday
+  const w = halfOf(i), other = w === 'am' ? 'pm' : 'am';
+  meta.textContent = (i === todayIdx(w)
     ? new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
-    : 'Story ' + (i + 1) + ' of ' + STORIES.length;
+    : 'Story ' + (POOL[w].indexOf(i) + 1) + ' of ' + POOL[w].length) + ' · ' + HALF[w].label.toLowerCase();
+  flip.textContent = HALF[other].icon + " Today's " + HALF[other].label.toLowerCase();
+  flip.href = '#/' + other;
   home.textContent = 'All stories';
   home.href = '#/archive';
 
@@ -484,8 +511,9 @@ function renderStory(i) {
     '<div class="id" id="id" hidden>' + build(s.id, []) + '</div>' +
     '<ul class="vocab">' + s.v.map(([w, m]) => '<li><b>' + esc(w) + '</b> <span>' + esc(m) + '</span></li>').join('') + '</ul>' +
     '<nav class="pager">' +
-      '<a href="#/' + (i === 0 ? STORIES.length : i) + '">← Previous</a>' +
-      '<a href="#/' + ((i + 2) > STORIES.length ? 1 : i + 2) + '">Next →</a>' +
+      // Paging stays inside the half you are in, so bedtime never follows breakfast.
+      '<a href="#/' + (POOL[w][(POOL[w].indexOf(i) - 1 + POOL[w].length) % POOL[w].length] + 1) + '">← Previous</a>' +
+      '<a href="#/' + (POOL[w][(POOL[w].indexOf(i) + 1) % POOL[w].length] + 1) + '">Next →</a>' +
     '</nav>';
 
   const speak = document.getElementById('speak');
@@ -503,6 +531,7 @@ function route() {
   speaking = false;
   const h = location.hash.replace('#/', '');
   if (h === 'archive') return renderArchive();
+  if (h === 'am' || h === 'pm') return renderStory(todayIdx(h));
   const n = parseInt(h, 10);
   renderStory(n >= 1 && n <= STORIES.length ? n - 1 : todayIdx());
 }

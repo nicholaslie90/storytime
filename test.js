@@ -5,10 +5,16 @@ const fs = require('fs');
 const STORIES = eval(fs.readFileSync(__dirname + '/stories.js', 'utf8') + ';STORIES');
 const html = fs.readFileSync(__dirname + '/index.html', 'utf8');
 
-assert.strictEqual(STORIES.length, 90, 'need 90 stories');
+assert.strictEqual(STORIES.length, 180, 'need 180 stories');
+
+// Two pools: morning stories carry tm "am", bedtime stories carry nothing.
+const POOL = { am: [], pm: [] };
+STORIES.forEach((s, i) => POOL[s.tm === 'am' ? 'am' : 'pm'].push(i));
+assert.strictEqual(POOL.am.length, 90, 'need 90 morning stories');
+assert.strictEqual(POOL.pm.length, 90, 'need 90 bedtime stories');
 
 // The scenes the CSS and the FX table actually know about.
-const SCENES = ['day', 'night', 'rain', 'snow', 'water', 'garden'];
+const SCENES = ['dawn', 'day', 'night', 'rain', 'snow', 'water', 'garden'];
 for (const sc of SCENES) {
   assert.ok(html.includes('.sc-' + sc) || sc === 'day', `index.html has no CSS for scene "${sc}"`);
   assert.ok(new RegExp('\\b' + sc + ':\\s*\\{').test(html), `index.html FX table has no entry for scene "${sc}"`);
@@ -28,6 +34,10 @@ for (const [i, s] of STORIES.entries()) {
   assert.ok(!titles.has(s.t), `${where}: duplicate title`);
   titles.add(s.t);
   assert.ok(SCENES.includes(s.sc), `${where}: sc "${s.sc}" is not one of ${SCENES.join(', ')}`);
+  assert.ok(s.tm === undefined || s.tm === 'am', `${where}: tm must be "am" or absent`);
+  // A sunrise at bedtime, or a night sky over breakfast, reads as a mistake.
+  assert.ok(s.sc !== 'dawn' || s.tm === 'am', `${where}: scene "dawn" on a bedtime story`);
+  assert.ok(s.sc !== 'night' || s.tm !== 'am', `${where}: scene "night" on a morning story`);
   assert.ok(s.v.length >= 3, `${where}: needs 3+ vocab words`);
   assert.ok(Array.isArray(s.e) && s.e.length >= 3 && s.e.length <= 5 && s.e.every(Boolean),
     `${where}: e needs 3-5 emoji [hero, then friends]`);
@@ -61,13 +71,22 @@ const dayOfYear = d => Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.get
 assert.strictEqual(dayOfYear(new Date(2026, 0, 1)), 1, '1 January should be day 1');
 assert.strictEqual(dayOfYear(new Date(2026, 11, 31)), 365, '31 December 2026 should be day 365');
 assert.strictEqual(dayOfYear(new Date(2024, 11, 31)), 366, '31 December 2024 (leap) should be day 366');
-const seen = new Set();
-for (let d = 1; d <= 366; d++) {
-  const idx = (d - 1) % STORIES.length;
-  assert.ok(STORIES[idx], `day ${d} has no story`);
-  seen.add(idx);
+for (const w of ['am', 'pm']) {
+  const seen = new Set();
+  for (let d = 1; d <= 366; d++) {
+    const idx = POOL[w][(d - 1) % POOL[w].length];
+    assert.ok(STORIES[idx], `day ${d} has no ${w} story`);
+    seen.add(idx);
+  }
+  assert.strictEqual(seen.size, POOL[w].length, `a year should reach every ${w} story`);
 }
-assert.strictEqual(seen.size, STORIES.length, 'a year should reach every story');
+
+// The clock, not the calendar, picks the half. Noon is the switch.
+const nowHalf = h => h < 12 ? 'am' : 'pm';
+assert.strictEqual(nowHalf(0), 'am', 'midnight is morning');
+assert.strictEqual(nowHalf(11), 'am', '11am is morning');
+assert.strictEqual(nowHalf(12), 'pm', 'noon flips to bedtime');
+assert.strictEqual(nowHalf(23), 'pm', '11pm is bedtime');
 
 // Read-aloud highlights by character offset, so every word's data-i must be that
 // word's real position in the spoken string (newlines spoken as single spaces).
@@ -86,4 +105,5 @@ for (const s of STORIES) {
   assert.strictEqual(got, want, `${s.t}: marked ${got} vocab word spans, expected ${want}`);
 }
 
-console.log('ok — ' + STORIES.length + ' stories (' + sourced + ' from the public domain), scenes, vocab, rotation and read-aloud offsets check out');
+console.log('ok — ' + STORIES.length + ' stories, ' + POOL.am.length + ' morning + ' + POOL.pm.length + ' bedtime (' +
+  sourced + ' from the public domain), scenes, vocab, rotation and read-aloud offsets check out');
